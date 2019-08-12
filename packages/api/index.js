@@ -21,7 +21,7 @@ const NAME = `api-${HOST}:${PORT}`;
 
 connectToDatabase().then(async db => {
 
-    await consul.agent.service.register({
+    consul.agent.service.register({
         name: NAME,
         address: HOST,
         port: PORT,
@@ -44,8 +44,8 @@ connectToDatabase().then(async db => {
         res.end(NAME + "\n\n" + JSON.stringify(services, null, 3));
     })
 
-    app.listen(3000);
-    console.log("Listening on 3000")
+    app.listen(PORT);
+    console.log(`API server listening on ${PORT}`);
     
 });
 

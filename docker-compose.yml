@@ -24,14 +24,29 @@ services:
     environment:
       CONSUL_BIND_INTERFACE : eth0
 
-  api-balancer:
+  api-gateway:
     build:
-      context: ./packages/balancer
+      context: ./packages/gateway
       dockerfile: Dockerfile.dev
+    environment:
+      PROXY_TARGET_TAG : "api"
+      PORT: 5050
     volumes:
-      - ./packages/balancer:/app
+      - ./packages/gateway:/app
     ports:
       - "5050:5050"
+      
+  web-app-gateway:
+    build:
+      context: ./packages/gateway
+      dockerfile: Dockerfile.dev
+    environment:
+      PROXY_TARGET_TAG : "web-app"
+      PORT: 5051
+    volumes:
+      - ./packages/gateway:/app
+    ports:
+      - "5051:5051"
 
   api:
     build:
@@ -40,18 +55,32 @@ services:
     volumes:
       - ./packages/api:/app
     ports:
-      - "3000-3010:3000"
+      - "4000-4010:3000"
+    environment:
+      PORT: 3000
     restart: "always"
     depends_on: 
       - mongo
       - consul
 
-  nginx:
-    image: nginx:alpine
-    ports: 
-      - "8080:80"
+  web-app:
+    restart: "always"
+    build:
+      context: ./packages/web/
+      dockerfile: Dockerfile.dev
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./packages/web:/app     
+    environment:
+      PORT: 3000
+    depends_on:
+      - api     
+
+  nginx:
+    build:
+      context: ./nginx/
+    restart: always
+    ports:
+      - "3333:80"
 
 
   
