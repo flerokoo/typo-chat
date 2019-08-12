@@ -1,0 +1,7 @@
+FROM node:alpine
+
+WORKDIR /app
+
+VOLUME /app
+
+CMD ["/app/node_modules/.bin/nodemon"]
