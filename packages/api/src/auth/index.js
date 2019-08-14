@@ -21,7 +21,6 @@ const getUser = payload => {
 
 module.exports = () => {
     passport.use(new Strategy(opts, async (payload, done) => {
-        console.log("payload", payload)
         let user = await getUser(payload);
         if (user) {
             return done(null, user);

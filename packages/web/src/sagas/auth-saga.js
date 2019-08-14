@@ -23,13 +23,9 @@ export function* authSaga(action) {
 
     try {
         const response = yield call(loginUserService, action.payload); 
-        
-        // if (!error && !response.error) {
-            yield put({ type: UserActions.LOGIN_SUCCESS, payload: response });
-        // } else {
-            // yield put({ type: UserActions.LOGIN_FAILURE , payload: { error } })
-        // }
+        yield put({ type: UserActions.LOGIN_SUCCESS, payload: response });
     } catch(error) {
+        error = error && error.message ? error.message : error;
         yield put({ type: UserActions.LOGIN_FAILURE, payload: { error } })
     }
 }
