@@ -21,6 +21,8 @@ services:
 
   consul:
     image: consul
+    logging:
+      driver: none
     environment:
       CONSUL_BIND_INTERFACE : eth0
 
@@ -42,6 +44,7 @@ services:
       dockerfile: Dockerfile.dev
     environment:
       PROXY_TARGET_TAG : "web-app"
+      OVERRIDE_TARGET_PORT: 3000
       PORT: 5051
     volumes:
       - ./packages/gateway:/app
@@ -71,7 +74,9 @@ services:
     volumes:
       - ./packages/web:/app     
     environment:
-      PORT: 3000
+      NODE_ENV: "development"
+      BS_PORT: 3000
+      PORT: 3010
     depends_on:
       - api     
 
@@ -80,7 +85,9 @@ services:
       context: ./nginx/
     restart: always
     ports:
-      - "3333:80"
+      - "3000:80"
+    logging:
+      driver: none
 
 
   

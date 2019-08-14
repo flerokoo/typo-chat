@@ -4,6 +4,7 @@ module.exports = ({mongoConnection}) => {
     let schema = mongoose.Schema({
         text: String,
         roomId: Number,
+        author: String,
         date: Date
     })
 

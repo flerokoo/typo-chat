@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const crypto =  require('crypto');
+const jwt = require("jsonwebtoken")
 
 module.exports = ({mongoConnection, config}) => {
     let schema = mongoose.Schema({
@@ -28,7 +29,7 @@ module.exports = ({mongoConnection, config}) => {
             exp: parseInt(expirationDate.getTime() / 1000, 10),
         }, config.JWTSECRET);
     }
-      
+    
     schema.methods.toAuthJSON = function() {
         return {
             _id: this._id,

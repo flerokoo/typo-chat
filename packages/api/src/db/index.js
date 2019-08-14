@@ -6,11 +6,12 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
         return result;
     }
 
-    const postMessage = async (roomId, text) => {
+    const postMessage = async (roomId, userId, text) => {
         let message = new MessageModel({
             roomId,
             text,
-            date: new Date()
+            date: new Date(),
+            author: userId
         })
 
         await message.save();
@@ -23,7 +24,22 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
     }
 
     const getUserByName = async username => {
-        let result = await UserModel.find({username});
+        let result = await UserModel.findOne({username});
+        return result;
+    }
+
+    const jwtAuthenticate = async (username, password) => {
+        let user = await getUserByName(username);
+        if (!user) {
+            return { error : "No user found"}
+        }
+
+        if (!user.validatePassword(password)) {
+            return { error: "Wrong password"};
+        }
+
+        const result = user.toAuthJSON();
+
         return result;
     }
 
@@ -38,7 +54,8 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
         postMessage,
         registerUser,
         getUserByName,
-        createRoom
+        createRoom,
+        jwtAuthenticate
     }
 
 }

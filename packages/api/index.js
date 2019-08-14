@@ -7,6 +7,7 @@ const configureMiddlewares = require("./src/middlewares");
 const registerMessageRoutes = require("./src/routes/messages");
 const registerUserRoutes = require("./src/routes/users");
 const registerRoomRouters = require("./src/routes/rooms");
+const configureAuth = require("./src/auth/");
 
 const container = createContainer();
 
@@ -17,7 +18,7 @@ const consul = require("consul")({
 
 const PORT = parseInt(process.env.PORT) || 3000;
 const HOST = require("os").hostname();
-const NAME = `api-${HOST}:${PORT}`;
+const NAME = `api-${HOST}-${PORT}`;
 
 connectToDatabase().then(async db => {
 
@@ -33,6 +34,7 @@ connectToDatabase().then(async db => {
     container.register("app", asFunction(express).singleton());
     container.register("router", asFunction(() => express.Router()));  
     container.build(configureMiddlewares)
+    container.build(configureAuth)
     container.build(registerMessageRoutes);
     container.build(registerUserRoutes);
     container.build(registerRoomRouters);

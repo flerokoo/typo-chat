@@ -6,4 +6,4 @@ WORKDIR /app
 
 VOLUME /app
 
-CMD ["/app/node_modules/.bin/nodemon"]
+CMD ["node", "/app/node_modules/gulp/bin/gulp.js"]

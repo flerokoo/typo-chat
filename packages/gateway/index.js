@@ -6,8 +6,9 @@ const http = require('http'),
     });
 
 const proxy = httpProxy.createProxyServer({});
-const PORT = process.env.PORT || 3000;
 const TAG = process.env.PROXY_TARGET_TAG || "api";
+const PORT = parseInt(process.env.PORT) || 3000;
+const OVERRIDE_TARGET_PORT = parseInt(process.env.OVERRIDE_TARGET_PORT) || undefined;
 
 const server = http.createServer(async (req, res) => {
     let services = await consul.agent.services();
@@ -23,9 +24,10 @@ const server = http.createServer(async (req, res) => {
             return; 
         }
 
-        let index = Math.floor(Math.random() * targetServices.length);
-        let serviceInfo = targetServices.splice(index, 1)[0];
-        proxy.web(req, res, { target: `http://${serviceInfo.Address}:${serviceInfo.Port}` });
+        let index = Math.floor(Math.random() * targetServicesKeys.length);
+        let serviceInfo = targetServices[index];
+        targetServicesKeys.splice(index, 1);
+        proxy.web(req, res, { target: `http://${serviceInfo.Address}:${OVERRIDE_TARGET_PORT || serviceInfo.Port}` });
     }
 
     proxy.on("error", tryNext);

@@ -4,5 +4,5 @@ module.exports = {
     DBNAME: "admin",
     DBUSER: "root",
     DBPASSWORD: "password",
-    JWTSECRET: process.env.jwtSecret || "secret"
+    JWTSECRET: process.env.JWT_SECRET || "secret"
 }
