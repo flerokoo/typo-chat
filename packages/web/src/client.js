@@ -6,6 +6,7 @@ import configureStore from "./configure-store";
 import { Provider } from 'react-redux';
 import "regenerator-runtime/runtime";
 import "core-js/stable";
+import './style/index.scss'
 
 let preloadedState = {};
 

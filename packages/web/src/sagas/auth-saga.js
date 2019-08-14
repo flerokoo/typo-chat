@@ -8,23 +8,29 @@ let loginUserService = payload => {
         maxRedirects: 0,
         withCredentials: true
     })
-    .then(response => ({ response: response.data }))
-    .catch(error => ({ error }))
+    .then(response => response.data)
+    .then(data => {
+        if(data.error) {
+            return Promise.reject(data.error)
+        } else {
+            return Promise.resolve(data)
+        }
+    })
 }
 
 export function* authSaga(action) {
     if (!action || !action.payload) return put({ type: UserActions.LOGIN_FAILURE });
 
     try {
-        const { response, error } = yield call(loginUserService, action.payload); 
+        const response = yield call(loginUserService, action.payload); 
         
-        if (!error) {
+        // if (!error && !response.error) {
             yield put({ type: UserActions.LOGIN_SUCCESS, payload: response });
-        } else {
-            yield put({ type: UserActions.LOGIN_FAILURE , payload: { error } })
-        }
+        // } else {
+            // yield put({ type: UserActions.LOGIN_FAILURE , payload: { error } })
+        // }
     } catch(error) {
-        yield put({ type: UserActions.LOGIN_FAILURE, payload: { error: error.message } })
+        yield put({ type: UserActions.LOGIN_FAILURE, payload: { error } })
     }
 }
 

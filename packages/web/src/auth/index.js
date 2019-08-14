@@ -1,18 +1,23 @@
-const { Strategy, ExtractJwt} = require("passport-jwt");
+const { Strategy, ExtractJwt } = require("passport-jwt");
 const passport = require("passport");
-const axios = require("axios").default;
+const config = require("../config");
+// const config = {}a
+
 
 const opts = {
-    secretOrKey: 'secret',
-    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('bearer')
+    secretOrKey: config.JWTSECRET    
 }
 
+opts.jwtFromRequest = ExtractJwt.fromExtractors([
+    ExtractJwt.fromAuthHeaderWithScheme('bearer'),
+    req => req.cookies ? req.cookies["Authorization"] : undefined
+])
+
 const getUser = payload => {
-    // axios.get(`/users/${payload}`)
     return Promise.resolve({
-        _id: "id",
-        username: "name",
-        toker: "token"
+        _id: "FAKE ID",
+        username: "FAKE NAME",
+        token: "FAKE TOKEN"
     })
 }
 

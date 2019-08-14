@@ -15,8 +15,10 @@ class LoginForm extends React.Component {
     
 
     render() {
-        const requestLogin = () =>
+        const requestLogin = () => {
             this.props.requestLogin(this.loginRef.current.value, this.passwordRef.current.value);
+
+        }
 
         return (
             <form method="post" action="/login">

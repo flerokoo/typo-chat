@@ -3,15 +3,19 @@ const passport = require("passport");
 const config = require("../config");
 
 const opts = {
-    secretOrKey: config.JWTSECRET,
-    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('bearer')
+    secretOrKey: config.JWTSECRET    
 }
+
+opts.jwtFromRequest = ExtractJwt.fromExtractors([
+    ExtractJwt.fromAuthHeaderWithScheme('bearer'),
+    req => req.cookies && req.cookies["Authorization"]  
+])
 
 const getUser = payload => {
     return Promise.resolve({
-        _id: "id",
-        username: "name",
-        toker: "token"
+        _id: "FAKE ID",
+        username: "FAKE NAME",
+        token: "FAKE TOKEN"
     })
 }
 

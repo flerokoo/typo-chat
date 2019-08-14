@@ -13,6 +13,8 @@ module.exports = function({router, app, db}) {
             return res.json({error: result.error});
         }
 
+        res.cookie("Authorization", result.token);
+
         res.json(result);
     });
 

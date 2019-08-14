@@ -7,6 +7,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: password
+    logging:
+      driver: none
 
   mongo-express:
     image: mongo-express
@@ -18,6 +20,8 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password
     depends_on: 
       - mongo
+    logging:
+      driver: none
 
   consul:
     image: consul
