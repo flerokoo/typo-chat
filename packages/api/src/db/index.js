@@ -1,4 +1,6 @@
 
+const { isValidId } = require("./mdb-helpers")
+
 module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
 
     const getMessagesByRoomId = async roomId => {
@@ -43,6 +45,12 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
         return result;
     }
 
+    const getRoom = async _id => {
+        if (!isValidId(_id)) return null;
+        let room = await RoomModel.findById(_id);
+        return room;
+    }
+
     const createRoom = async () => {
         let room = new RoomModel();        
         await room.save();
@@ -55,7 +63,8 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
         registerUser,
         getUserByName,
         createRoom,
-        jwtAuthenticate
+        jwtAuthenticate,
+        getRoom
     }
 
 }
