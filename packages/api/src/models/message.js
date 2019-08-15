@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
+
 module.exports = ({mongoConnection}) => {
     let schema = mongoose.Schema({
         text: String,
-        roomId: Number,
-        author: String,
+        roomId: mongoose.Types.ObjectId,
+        author: mongoose.Types.ObjectId,
         date: Date
     })
 

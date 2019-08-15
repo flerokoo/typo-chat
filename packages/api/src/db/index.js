@@ -4,7 +4,11 @@ const { isValidId } = require("./mdb-helpers")
 module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
 
     const getMessagesByRoomId = async roomId => {
+        if (!isValidId(roomId)) {
+            return null;
+        }
         let result = await MessageModel.find({ roomId }).exec();
+
         return result;
     }
 

@@ -13,8 +13,8 @@ opts.jwtFromRequest = ExtractJwt.fromExtractors([
 
 const getUser = payload => {
     return Promise.resolve({
-        _id: "FAKE ID",
-        username: "FAKE NAME",
+        _id: payload.id,
+        username: payload.username,
         token: "FAKE TOKEN"
     })
 }

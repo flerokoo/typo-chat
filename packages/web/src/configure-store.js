@@ -1,13 +1,17 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga';
 import authReducer from './reducers/auth-reducer';
+import roomReducer from './reducers/room-reducer';
 import rootSaga from './sagas/';
+import messageReducer from './reducers/messages-reducer';
 
 
 export default function configureStore(preloadedState = {}) {
     
     let combined = combineReducers({
-        auth: authReducer
+        auth: authReducer,
+        room: roomReducer,
+        chat: messageReducer
     })
 
     let sagaMiddleware = createSagaMiddleware();

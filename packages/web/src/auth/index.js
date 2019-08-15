@@ -15,15 +15,16 @@ opts.jwtFromRequest = ExtractJwt.fromExtractors([
 
 const getUser = payload => {
     return Promise.resolve({
-        _id: "FAKE ID",
-        username: "FAKE NAME",
+        _id: payload.id,
+        username: payload.username,
         token: "FAKE TOKEN"
     })
 }
 
 module.exports = () => {
-    passport.use(new Strategy(opts, async (payload, done) => {
+    passport.use(new Strategy(opts, async (payload, done, info) => {
         console.log("payload", payload)
+        console.log("IIIIIIII", info)
         let user = await getUser(payload);
         if (user) {
             return done(null, user);

@@ -9,7 +9,8 @@ const initial = {
     username: null,
     token: false,
     loggingIn: false,
-    loggedIn: false
+    loggedIn: false,
+    error: null
 }
 
 export default function sidebarReducer(state = initial, action) {  
@@ -19,6 +20,7 @@ export default function sidebarReducer(state = initial, action) {
                 ...state,
                 loggingIn: false,
                 loggedIn: true,
+                error: null,
                 ...action.payload
             };
         case UserActions.LOGIN_FAILURE:
@@ -31,6 +33,7 @@ export default function sidebarReducer(state = initial, action) {
         case UserActions.LOGIN_REQUEST:
             return {
                 ...state,
+                error: null,
                 loggingIn: true,
                 loggedIn: false
             }

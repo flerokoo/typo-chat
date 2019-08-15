@@ -24,6 +24,11 @@ module.exports = function({router, app, db}) {
         res.status(200).end();
     });
 
+    router.get("/logout", async (req, res) => {
+        res.clearCookie("Authorization");
+        res.redirect("/")
+    })
+
     router.get("/", async (req, res) => {
         if (!req.body.username) {
             return res.status(404).end();

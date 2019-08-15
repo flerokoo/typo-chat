@@ -19,8 +19,11 @@ let loginUserService = payload => {
 }
 
 export function* authSaga(action) {
-    if (!action || !action.payload) return put({ type: UserActions.LOGIN_FAILURE });
-
+    if (!action || !action.payload) return put({ 
+        type: UserActions.LOGIN_FAILURE, 
+        payload: { error: "Wrong data supplied" } 
+    });
+    
     try {
         const response = yield call(loginUserService, action.payload); 
         yield put({ type: UserActions.LOGIN_SUCCESS, payload: response });

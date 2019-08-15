@@ -11,7 +11,7 @@ module.exports = function({router, app, db}) {
     });
 
     router.post("/", requireAuth, async (req, res) => {
-        await db.postMessage(req.body.roomId, req.body.userId, req.body.message)
+        await db.postMessage(req.body.roomId, req.body.userId, req.body.text)
         res.status(200).end();
     });
 
