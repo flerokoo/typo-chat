@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { authSaga, watchLoginRequest } from './auth-saga';
+import { authSaga, watchLoginRequest, watchSignupRequest } from './auth-saga';
 import { joinRoomSaga, watchJoinRoomRequest } from "./join-room-saga"
 import { watchGetMessagesRequest, watchSendMessageRequest } from "./messages-saga";
 
@@ -8,6 +8,7 @@ export default function* rootSaga() {
         watchLoginRequest(),
         watchJoinRoomRequest(),
         watchGetMessagesRequest(),
-        watchSendMessageRequest()
+        watchSendMessageRequest(),
+        watchSignupRequest()
     ])
 }

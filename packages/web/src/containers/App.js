@@ -6,6 +6,7 @@ import Lobby from "../components/Lobby"
 import LoginForm from '../components/LoginForm';
 import { UserActions } from '../reducers/auth-reducer';
 import { RoomActions } from "../reducers/room-reducer";
+import RegistrationForm from "../components/RegistrationForm";
 
 class App extends React.Component {
     render() {
@@ -13,6 +14,10 @@ class App extends React.Component {
      
         let renderLogin = props => (
             <LoginForm requestLogin={this.props.requestLogin}></LoginForm>
+        )
+     
+        let renderSignUp = props => (
+            <RegistrationForm requestRegistration={this.props.requestRegistration}></RegistrationForm>
         )
 
         let renderMain = props => {
@@ -29,13 +34,14 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" render={renderMain} />
                     <Route exact path="/login" render={renderLogin}/>
+                    <Route exact path="/register" render={renderSignUp}/>
                 </Switch>
             </React.Fragment>
         )
     }
 }
 
-let mapStateToProps = state => ( {
+let mapStateToProps = state => (console.log(state), {
     roomId: state.room.id,
     username: state.auth.username
 });
@@ -43,6 +49,8 @@ let mapStateToProps = state => ( {
 let dispatchToProps = dispatch => ({
     requestLogin: (username, password) => 
         dispatch({type: UserActions.LOGIN_REQUEST, payload: {username, password}}),
+    requestRegistration: (username, password) =>
+        dispatch({type: UserActions.SIGNUP_REQUEST, payload: {username, password}}),
     requestJoinRoom: roomId => 
         dispatch({ type: RoomActions.JOIN_REQUEST, payload: { roomId }})
 })

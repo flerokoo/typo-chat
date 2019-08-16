@@ -14,6 +14,7 @@ import requireAuth from './RequireAuth'
     }
 
     render() {
+        console.log(this.props)
         return (
             <React.Fragment>
                 <div className="megaform">
@@ -30,6 +31,9 @@ import requireAuth from './RequireAuth'
                         </div>
                         <div className="megaform__row">
                             <input type="button" value="Create new room" onClick={() => this.joinRoom(true)}/>
+                        </div>
+                        <div className="megaform__row">
+                            <input type="button" className="red" value="Log out" onClick={() => window.location.href = "/api/users/logout"}/>
                         </div>
                     </div>
                 </div>

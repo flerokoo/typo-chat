@@ -4,7 +4,7 @@ import requireAuth from './RequireAuth';
 import React from 'react';
 
 
-class LoginForm extends React.Component {
+class RegistrationForm extends React.Component {
 
     constructor() {
         super();
@@ -16,32 +16,31 @@ class LoginForm extends React.Component {
     
 
     render() {
-        const requestLogin = () => {
-            this.props.requestLogin(this.loginRef.current.value, this.passwordRef.current.value);
-
+        const requestRegistration = () => {
+            this.props.requestRegistration(this.loginRef.current.value, this.passwordRef.current.value);
         }
 
-        const toRegistration = () => {
-            this.props.history.push("/register")
+        const toLogin = () => {
+            this.props.history.push("/login")
         }
 
         return (
             <div className="megaform">
                 <div className="megaform__title">
-                    Sign in
+                    Sign up
                 </div>
                 <div className="megaform__inner">
                     <div className="megaform__row">
-                        <input ref={this.loginRef} type="text" placeholder="Username" name="username" defaultValue="USR"/>
+                        <input ref={this.loginRef} type="text" placeholder="Username" name="username"/>
                     </div>
                     <div className="megaform__row">
-                        <input ref={this.passwordRef} type="password" placeholder="Password" name="password" defaultValue="pass"/>
+                        <input ref={this.passwordRef} type="password" placeholder="Password" name="password"/>
                     </div>
                     <div className="megaform__row">
-                        <input type="button" className="green" onClick={requestLogin} value="Enter!" />
+                        <input type="button" className="green" onClick={requestRegistration} value="Register" />
                     </div>
                     <div className="megaform__row">
-                        <input type="button" onClick={toRegistration} value="Sign up" />
+                        <input type="button" onClick={toLogin} value="Sign in" />
                     </div>
                 </div>
             </div>
@@ -49,4 +48,4 @@ class LoginForm extends React.Component {
     }
 }
 
-export default requireAuth(LoginForm, false);
+export default requireAuth(RegistrationForm, false);

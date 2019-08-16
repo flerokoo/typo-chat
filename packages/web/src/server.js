@@ -5,13 +5,13 @@ const registerAuthRoutes = require("./routes/auth");
 const configureAuth = require("./auth/");
 const configureApp = require("./configure-app");
 
+let consul = require("consul")
 
 
 
 const { HOST, SERVICE_NAME, PORT, DISABLE_CONSUL } = require("./config")
-
 if (!DISABLE_CONSUL) {
-    const consul = require("consul")({
+    consul = consul({
         host: "consul",
         promisify: true,
     });
@@ -35,3 +35,15 @@ container.build(asFunction(registerWebRoutes));
 const app = container.resolve("app");
 app.listen(PORT);
 console.log(`Web app listening on ${PORT}`);
+
+
+const deregister = () => {
+    if (DISABLE_CONSUL) return process.exit();
+    consul.agent.service.deregister(SERVICE_NAME);
+    process.exit();
+}
+
+process.on("SIGINT", deregister);
+process.on("SIGUSR1", deregister);
+process.on("SIGUSR2", deregister);
+process.on("uncaughtException", deregister);

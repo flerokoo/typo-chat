@@ -21,6 +21,7 @@ import joi from 'joi-browser';
 // }
 
 const loginUserService = createApiService("/api/users/auth", "post")
+const signupUserService = createApiService("/api/users/", "post")
 
 // export function* authSaga(action) {
 //     if (!action || !action.payload) return put({ 
@@ -56,8 +57,24 @@ export const authSaga = createApiCallSaga(
     response => response
 )
 
+export const signupSaga = createApiCallSaga(
+    UserActions.SIGNUP_SUCCESS,
+    UserActions.LOGIN_FAILURE,
+    signupUserService,
+    payload => {
+        let { error, value } = authScheme.validate(payload);
+        if (error) {
+            return { error };
+        }
+        return value;
+    }, 
+    response => response)
 
   
 export function* watchLoginRequest() {
     yield takeLatest(UserActions.LOGIN_REQUEST, authSaga)
+}
+  
+export function* watchSignupRequest() {
+    yield takeLatest(UserActions.SIGNUP_REQUEST, signupSaga)
 }

@@ -36,9 +36,25 @@ module.exports = function({router, app, db}) {
     })
 
     router.post("/", async (req, res) => {
-        let { error, value : validatedBody } = postUserScheme.validate(req.body)
-        await db.registerUser(validatedBody.username, validatedBody.password)
-        res.status(200).end();
+        let { error, value : validatedBody } = postUserScheme.validate(req.body);
+
+        if (error) {
+            return res.json({ error });
+        }
+
+        const { username, password } = validatedBody;
+
+        await db.registerUser(username, password)
+        
+        let result = await db.jwtAuthenticate(username, password);
+        if (result.error) {
+            return res.json({error: result.error});
+        }
+
+        res.cookie("Authorization", result.token,   
+            {httpOnly: true, maxAge: 1000 * 60 * 60});
+
+        res.json(result);
     });
 
     router.get("/logout", async (req, res) => {

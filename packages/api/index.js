@@ -9,10 +9,12 @@ const registerUserRoutes = require("./src/routes/users");
 const registerRoomRouters = require("./src/routes/rooms");
 const configureAuth = require("./src/auth/");
 
+let consul = require("consul");
+
 const container = createContainer();
 
 if (!config.DISABLE_CONSUL) {
-    const consul = require("consul")({
+    consul = consul({
         host: "consul",
         promisify: true
     });
@@ -51,7 +53,8 @@ connectToDatabase().then(async db => {
 
 
 const deregister = () => {
-    consul.agent.service.deregister(NAME);
+    if (config.DISABLE_CONSUL) return;
+    consul.agent.service.deregister(config.SERVICE_NAME);
     process.exit();
 }
 

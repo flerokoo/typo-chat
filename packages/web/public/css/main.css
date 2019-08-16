@@ -159,6 +159,18 @@ body {
 .megaform input[type="button"]:hover {
   background: rgba(255, 255, 255, 0.2); }
 
+.megaform input[type="button"].red {
+  background: rgba(200, 20, 0, 0.1); }
+
+.megaform input[type="button"].red:hover {
+  background: rgba(200, 20, 0, 0.2); }
+
+.megaform input[type="button"].green {
+  background: rgba(255, 255, 0, 0.22); }
+
+.megaform input[type="button"].green:hover {
+  background: rgba(255, 255, 0, 0.32); }
+
 .megaform__inner {
   box-shadow: 0px 10px 55px -8px rgba(0, 0, 0, 0.67);
   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b959ff+0,49d2fc+100 */

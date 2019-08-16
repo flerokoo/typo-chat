@@ -27,6 +27,7 @@ module.exports = ({mongoConnection, MessageModel, UserModel, RoomModel}) => {
         let user = new UserModel({username});
         user.setPassword(password);
         await user.save();        
+        return user;
     }
 
     const getUserByName = async username => {

@@ -5,7 +5,7 @@ const reactResponse = require("./react-response")
 
 module.exports = ({app}) => {
 
-    const noAuth =  function(req, res, next) {
+    const noAuth = function(req, res, next) {
         passport.authenticate('jwt', function(err, user, info) {
             
             if (err) { 
@@ -26,8 +26,7 @@ module.exports = ({app}) => {
         reactResponse(req, res, next);
     });
 
-    app.get("/register", noAuth, (req, res) => {
-        
+    app.get("/register", noAuth, (req, res, next) => {        
         reactResponse(req, res, next);
     });
 
