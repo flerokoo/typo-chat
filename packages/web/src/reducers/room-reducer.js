@@ -2,7 +2,8 @@
 export const RoomActions = {
     JOIN_REQUEST: "room-join-request",
     JOIN_SUCCESS: "room-join-success",
-    JOIN_FAILURE: "room-join-failure"
+    JOIN_FAILURE: "room-join-failure",
+    EXIT: "room-exit"
 }
 
 const initial = {
@@ -31,6 +32,8 @@ export default function sidebarReducer(state = initial, action) {
                 ...initial,
                 joining: true               
             }
+        case RoomActions.EXIT:
+            return initial;
         default:
             return state;
     }

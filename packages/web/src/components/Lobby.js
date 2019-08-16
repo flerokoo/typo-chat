@@ -16,9 +16,23 @@ import requireAuth from './RequireAuth'
     render() {
         return (
             <React.Fragment>
-                <input type="button" value="Create new room" onClick={() => this.joinRoom(true)}/>
-                <input type="text" ref={this.roomIdRef}/>
-                <input type="button" value="Join room" onClick={() => this.joinRoom(false)}/>
+                <div className="megaform">
+                    <div className="megaform__title">
+                        Hello, {this.props.username}!
+                    </div>
+                    <div className="megaform__inner">
+                       
+                        <div className="megaform__row">
+                            <input type="text" placeholder="Enter room ID" ref={this.roomIdRef}/>
+                        </div>
+                        <div className="megaform__row">
+                            <input type="button" value="Join room" onClick={() => this.joinRoom(false)}/>
+                        </div>
+                        <div className="megaform__row">
+                            <input type="button" value="Create new room" onClick={() => this.joinRoom(true)}/>
+                        </div>
+                    </div>
+                </div>
             </React.Fragment>
         )
     }

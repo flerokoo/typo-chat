@@ -1,11 +1,22 @@
+const joi = require("joi");
 
 module.exports = function({router, app, db}) {
+
+    const authScheme = joi.object().keys({
+        username: joi.string().min(3),
+        password: joi.string().min(3)
+    });
+
     router.post("/auth", async (req, res) => {
-        const { username, password } = req.body;
         
-        if (!username || !password) {
-            return res.json({ error: "Not enough data"})
+
+        let { error, value : validatedBody } = authScheme.validate(req.body);
+        
+        if (error) {
+            return res.json({ error })
         }
+
+        const { username, password } = validatedBody;
 
         let result = await db.jwtAuthenticate(username, password);
 
@@ -19,8 +30,14 @@ module.exports = function({router, app, db}) {
         res.json(result);
     });
 
+    const postUserScheme = joi.object().keys({
+        username: joi.string().min(3),
+        password: joi.string().min(3)
+    })
+
     router.post("/", async (req, res) => {
-        await db.registerUser(req.body.username, req.body.password)
+        let { error, value : validatedBody } = postUserScheme.validate(req.body)
+        await db.registerUser(validatedBody.username, validatedBody.password)
         res.status(200).end();
     });
 
@@ -29,13 +46,13 @@ module.exports = function({router, app, db}) {
         res.redirect("/")
     })
 
-    router.get("/", async (req, res) => {
-        if (!req.body.username) {
-            return res.status(404).end();
-        }
-        let user = await db.getUserByName(req.body.username);
-        res.json(user);
-    });
+    // router.get("/", async (req, res) => {
+    //     if (!req.body.username) {
+    //         return res.status(404).end();
+    //     }
+    //     let user = await db.getUserByName(req.body.username);
+    //     res.json(user);
+    // });
 
     app.use("/users", router);
 }

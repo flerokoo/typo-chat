@@ -37,7 +37,8 @@ gulp.task("serve", callback => {
         port: config.BS_PORT,
         watch: false,  
         open: false,      
-        proxy: "127.0.0.1:" + config.APP_PORT        
+        proxy: "127.0.0.1:" + config.APP_PORT,
+        ghostMode: false   
     })
 
     // debounce reloading to trailing edge

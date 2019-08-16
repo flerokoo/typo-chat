@@ -21,13 +21,22 @@ class LoginForm extends React.Component {
         }
 
         return (
-            <form method="post" action="/login">
-                {/* <label>Login</label> */}
-                <input ref={this.loginRef} type="text" placeholder="Username" name="username" defaultValue="USR"/>
-                {/* <label>Password</label> */}
-                <input ref={this.passwordRef} type="password" placeholder="Password" name="password" defaultValue="pass"/>                      
-                <input type="button" onClick={requestLogin} value="Go!" />
-            </form> 
+            <div className="megaform">
+                <div className="megaform__title">
+                    Sign in
+                </div>
+                <div className="megaform__inner">
+                    <div className="megaform__row">
+                        <input ref={this.loginRef} type="text" placeholder="Username" name="username" defaultValue="USR"/>
+                    </div>
+                    <div className="megaform__row">
+                        <input ref={this.passwordRef} type="password" placeholder="Password" name="password" defaultValue="pass"/>
+                    </div>
+                    <div className="megaform__row">
+                        <input type="button" onClick={requestLogin} value="Go!" />
+                    </div>
+                </div>
+            </div>
         )
     }
 }

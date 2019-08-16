@@ -4,23 +4,25 @@ const registerWebRoutes = require("./routes/web");
 const registerAuthRoutes = require("./routes/auth");
 const configureAuth = require("./auth/");
 const configureApp = require("./configure-app");
-const consul = require("consul")({
-    host: "consul",
-    promisify: true,
-});
 
 
 
-const PORT = parseInt(process.env.PORT) || 3000;
-const HOST = require("os").hostname();
-const NAME = `web-app-${HOST}-${PORT}`;
 
-consul.agent.service.register({
-    name: NAME,
-    address: HOST,
-    port: PORT,
-    tags: ["web-app"]
-});
+const { HOST, SERVICE_NAME, PORT, DISABLE_CONSUL } = require("./config")
+
+if (!DISABLE_CONSUL) {
+    const consul = require("consul")({
+        host: "consul",
+        promisify: true,
+    });
+
+    consul.agent.service.register({
+        name: SERVICE_NAME,
+        address: HOST,
+        port: PORT,
+        tags: ["web-app"]
+    });
+}
 
 
 const container = createContainer();

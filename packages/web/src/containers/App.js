@@ -20,7 +20,7 @@ class App extends React.Component {
                 console.log(this.props.roomId)
                 return (<Chat></Chat>)
             } else {
-                return (<Lobby requestJoinRoom={this.props.requestJoinRoom}></Lobby>)
+                return (<Lobby username={this.props.username} requestJoinRoom={this.props.requestJoinRoom}></Lobby>)
             }
         }
 
@@ -35,8 +35,9 @@ class App extends React.Component {
     }
 }
 
-let mapStateToProps = state => (console.log(state), {
-    roomId: state.room.id
+let mapStateToProps = state => ( {
+    roomId: state.room.id,
+    username: state.auth.username
 });
 
 let dispatchToProps = dispatch => ({

@@ -2,6 +2,7 @@ import requireAuth from '../components/RequireAuth';
 import React from 'react';
 import { connect } from 'react-redux'
 import { MessageActions } from '../reducers/messages-reducer';
+import { RoomActions } from '../reducers/room-reducer';
 
 class MessageForm extends React.Component {
 
@@ -14,16 +15,28 @@ class MessageForm extends React.Component {
         let text = this.messageRef.current.value;
 
         if(!text || text.length === 0) {
-            return;
+            return this.messageRef.current.focus();
         }
 
         this.props.sendMessage(text)
+        this.messageRef.current.value = "";
+        this.messageRef.current.focus();
+    }
+
+    onKeyPressHandler(e) {
+        if(e.key === "Enter") {
+            this.sendMessage();
+        }
+    }
+
+    componentDidMount() {
+        this.messageRef.current.focus();
     }
 
     render() {
         return (
         <div className="chat__message-form">
-            <input ref={this.messageRef} type="text" className="chat__message-input" placeholder="Write your message here"/>
+            <input ref={this.messageRef} type="text" className="chat__message-input" onKeyPress={this.onKeyPressHandler.bind(this)} placeholder="Write your message here"/>
             <input type="button" onClick={this.sendMessage.bind(this)} value="Send"/>
         </div>);
     }
@@ -36,8 +49,8 @@ class Chat extends React.Component {
         this.intervalId = -1;
     }
 
-    componentWillMount() {
-        this.intervalId = setInterval(this.requestNewMessages.bind(this), 1000);
+    componentDidMount() {
+        this.intervalId = setInterval(this.requestNewMessages.bind(this), 250);
     }
 
     componentWillUnmount() {
@@ -48,16 +61,47 @@ class Chat extends React.Component {
         this.props.dispatchRequestMessage(this.props.roomId)
     }
 
-    render() {
+    exitRoom() {
+        this.props.exitRoom()
+    }
 
-        let messages = (this.props.messages || []).map(value => {
-            return (<div className="chat__message" key={value._id}>{value.text}</div>)
+    render() {
+        let prevAuthor = 0;
+
+        let messages = (this.props.messages || []).map( (value, i, messages) => {
+
+            const isSelf = value.author === this.props.userId;
+            const printAuthor = i === messages.length - 1 || messages[i+1].author !== value.author;
+
+            const messageClass = ["chat__message"];
+
+            if (isSelf) messageClass.push("chat__message--my");
+
+            if (printAuthor) messageClass.push("chat__message--show-author");
+
+            prevAuthor = value.author;
+
+            return (
+                <div className={messageClass.join(" ")} key={value._id}>            
+                    <div className="chat__message__author">{value.author}</div>            
+                    <div className="chat__message__text">{value.text}</div>            
+                </div>)
         })
 
         return (
             <div className="chat">
-                <div className="chat__messages">{messages}</div>
-                <MessageForm sendMessage={text => this.props.sendMessage(this.props.roomId, this.props.userId, text)}></MessageForm>
+                <div className="chat__top">
+                    <div className="chat__menu">
+                        Menu
+                        <input type="button" value="Exit room" onClick={this.exitRoom.bind(this)}/>
+                    </div>
+                    <div className="chat__messages">
+                        {messages}
+                    </div>
+                </div>
+                <div className="chat__bottom">
+                    <MessageForm sendMessage={text => this.props.sendMessage(this.props.roomId, this.props.userId, text)}></MessageForm>
+                </div>
             </div>
         )
     }
@@ -71,7 +115,8 @@ const mapDispatchToProps = dispatch => ({
     sendMessage: (roomId, userId, text) => dispatch({
         type: MessageActions.SEND_MESSAGE_REQUEST,
         payload: { roomId, userId, text }
-    })
+    }),
+    exitRoom: () => dispatch({ type: RoomActions.EXIT })
 })
 
 const mapStateToProps = state => ({

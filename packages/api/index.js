@@ -11,23 +11,21 @@ const configureAuth = require("./src/auth/");
 
 const container = createContainer();
 
-const consul = require("consul")({
-    host: "consul",
-    promisify: true
-});
-
-const PORT = parseInt(process.env.PORT) || 3000;
-const HOST = require("os").hostname();
-const NAME = `api-${HOST}-${PORT}`;
-
-connectToDatabase().then(async db => {
+if (!config.DISABLE_CONSUL) {
+    const consul = require("consul")({
+        host: "consul",
+        promisify: true
+    });
 
     consul.agent.service.register({
-        name: NAME,
-        address: HOST,
-        port: PORT,
+        name: config.SERVICE_NAME,
+        address: config.HOST,
+        port: config.PORT,
         tags: ["api"]
     });
+}
+
+connectToDatabase().then(async db => {    
 
     // container.register("mongoConnection", asValue(mongoConnection));
     container.register("db", asValue(db));
@@ -46,8 +44,8 @@ connectToDatabase().then(async db => {
         res.end(NAME + "\n\n" + JSON.stringify(services, null, 3));
     })
 
-    app.listen(PORT);
-    console.log(`API server listening on ${PORT}`);
+    app.listen(config.PORT);
+    console.log(`API server listening on ${config.PORT}`);
     
 });
 
