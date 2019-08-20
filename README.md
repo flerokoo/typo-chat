@@ -17,3 +17,8 @@ Distributed and horizontally scalable multiroom chat.
 * __docker/docker-compose__ for ease of use and transportability
 
 
+## Screenshots
+
+![](/pics/one.png)
+![](/pics/two.png)
+![](/pics/three.png)
