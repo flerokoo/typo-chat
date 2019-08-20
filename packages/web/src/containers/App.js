@@ -7,12 +7,25 @@ import LoginForm from '../components/LoginForm';
 import { UserActions } from '../reducers/auth-reducer';
 import { RoomActions } from "../reducers/room-reducer";
 import RegistrationForm from "../components/RegistrationForm";
+import { TransitionGroup, CSSTransition, SwitchTransition } from 'react-transition-group';
+
+const transProps = {
+    entering: { opacity: 1 },
+    entered:  { opacity: 1 },
+    exiting:  { opacity: 0 },
+    exited:  { opacity: 0 },
+}
+
+
 
 class App extends React.Component {
+
+    
+
     render() {
         let strippedPage = /(login|register)/i.test(this.props.history.location.pathname);
-     
-        let renderLogin = props => (
+        let location = this.props.location;
+        let renderLogin = props => (            
             <LoginForm requestLogin={this.props.requestLogin}></LoginForm>
         )
      
@@ -22,20 +35,44 @@ class App extends React.Component {
 
         let renderMain = props => {
             if (this.props.roomId) {
+                console.log("rendering CHAT")
                 console.log(this.props.roomId)
                 return (<Chat></Chat>)
             } else {
+                console.log("LOBY")
                 return (<Lobby username={this.props.username} requestJoinRoom={this.props.requestJoinRoom}></Lobby>)
             }
         }
+        
 
+        const routes = {
+            "/login" : renderLogin.bind(this),
+            "/register": renderSignUp.bind(this),
+            "/" : renderMain.bind(this)
+        }
+
+        const routesRendered = Object.entries(routes).map(([path, renderer]) => {
+            const wrapped = props => (
+                <CSSTransition
+                        in={this.props.match != null}
+                        key={location.key}
+                        timeout={500}
+                        classNames={'fade'}>
+                        {renderer(props)}
+                </CSSTransition>
+            );
+
+            return (<Route exact key={path} path={path} render={wrapped}></Route>)
+        })
+
+        
         return (
-            <React.Fragment>        
-                <Switch>
-                    <Route exact path="/" render={renderMain} />
-                    <Route exact path="/login" render={renderLogin}/>
-                    <Route exact path="/register" render={renderSignUp}/>
-                </Switch>
+            <React.Fragment>  
+                <SwitchTransition timeout={500} style={{width: "100%", height: "100%"}}>                       
+                    <Switch>
+                        {routesRendered}
+                    </Switch>
+                </SwitchTransition>
             </React.Fragment>
         )
     }

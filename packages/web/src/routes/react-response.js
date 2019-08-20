@@ -49,7 +49,8 @@ const authScheme = joi.object({
 const reduxStateScheme = joi.object({
     auth : [ joi.optional(), authScheme ],
     room: joi.optional(),
-    chat: joi.optional()
+    chat: joi.optional(),
+    chatMenu: joi.optional()
 })
 
 module.exports = (req, res) => {
@@ -84,8 +85,7 @@ module.exports = (req, res) => {
         let { error, value : validatedStore } = reduxStateScheme.validate(storeState);
 
         if (error) {
-            res.write("SUKA")
-            res.send(error)
+            return res.send(error)
         }
 
         // console.log(req.url)

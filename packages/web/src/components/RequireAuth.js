@@ -12,7 +12,7 @@ export default function requireAuth(Component, requires = true, redirectTo = nul
             const loggedIn = this.props.userLoggedIn;
             if (requires ? loggedIn : !loggedIn) {
                 return (<Component {...this.props}/>)
-            } else if(this.props.userLoggingIn) {
+            } else if (this.props.userLoggingIn) {
                 return (<div>Loading</div>)
             } else {
                 return (<Redirect to={redirectTo}/>)

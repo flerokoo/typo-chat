@@ -13,8 +13,6 @@ class RegistrationForm extends React.Component {
     }
 
 
-    
-
     render() {
         const requestRegistration = () => {
             this.props.requestRegistration(this.loginRef.current.value, this.passwordRef.current.value);

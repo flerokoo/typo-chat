@@ -4,6 +4,7 @@ import authReducer from './reducers/auth-reducer';
 import roomReducer from './reducers/room-reducer';
 import rootSaga from './sagas/';
 import messageReducer from './reducers/messages-reducer';
+import chatMenuReducer from './reducers/chat-menu-reducer';
 
 
 export default function configureStore(preloadedState = {}) {
@@ -11,7 +12,8 @@ export default function configureStore(preloadedState = {}) {
     let combined = combineReducers({
         auth: authReducer,
         room: roomReducer,
-        chat: messageReducer
+        chat: messageReducer,
+        chatMenu: chatMenuReducer
     })
 
     let sagaMiddleware = createSagaMiddleware();
